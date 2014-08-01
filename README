@@ -1,0 +1,28 @@
+vim-perl-testing
+
+A set of utilities to help you wright and run your perl tests directly
+from your favorite editor.
+
+Available commands that you might want to map to handy keystrokes:
+
+ GotoCorresponding()
+
+If you are currently editing a module, this function will open a new tab
+containing the corresponding .t file. If you are currently editing a test
+file, it will open a tab containing the corresponding module. Of course,
+this requires you to have a correspondance of tests and modules in the
+first place. See http://blogs.perl.org/users/ovid/2013/03/discoverable-tests-and-creating-testing-standards.html
+for the details of this and also to learn about the inspiration for this
+plugin.
+
+ RunTestForCurrentSub()
+
+When working on a subroutine, you may feel like running the corresponding
+test. The function will find your corresponding test file and will try to 
+run the subroutine in that test file that is supposed to test the subroutine
+you are currently changing. 
+
+
+ LICENSE
+
+See `:help license`.
