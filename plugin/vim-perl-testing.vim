@@ -7,6 +7,11 @@ if exists('g:loaded_vim_perl_testing') || &cp
 endif
 let g:loaded_vim_perl_testing = 1
 
+if !exists('g:vim_perl_testing_use_tmux')
+  let g:vim_perl_testing_use_tmux = 0
+endif
+
+
 function! Find_corresponding_t_file( module )
     let b:testfile = substitute( substitute( a:module, '.\+\/lib\/', '', '' ), '.pm$', '.t', '' )
     let b:basepath = substitute( a:module, '\/lib\/.\+', '', '' )
@@ -89,11 +94,20 @@ function! RunTestForCurrentSub()
     if ( match( b:current_file, '.pm$') != -1 )
         let b:test_file = Find_corresponding_t_file( b:current_file )
         if filereadable( b:test_file )
-            let b:test_command = "perl Space " . b:test_file . " Space test_" . GetCurrentPerlSub()
-            let b:tmux_command = "tmux send-keys -t :.+ " . b:test_command . " Enter"
-            let error = system( b:tmux_command )
-            if ( v:shell_error ) 
-                echoe "Could not run " b:test_command . ": " . error
+            if g:vim_perl_testing_use_tmux
+                let b:test_command = "perl Space " . b:test_file . " Space test_" . GetCurrentPerlSub()
+                let b:tmux_command = "tmux send-keys -t :.+ " . b:test_command . " Enter"
+                let error = system( b:tmux_command )
+                if ( v:shell_error ) 
+                    echoe "Could not run " b:test_command . ": " . error
+                endif
+            else
+                let restore_makeprg = 'setlocal makeprg=' . escape( &l:makeprg, ' ' )
+                let b:test_command = 'perl\ ' . b:test_file . '\ test_' . GetCurrentPerlSub()
+                echom 'restore command is ' . restore_makeprg
+                execute "setlocal makeprg=" . b:test_command
+                execute "make"
+                execute restore_makeprg
             endif
         endif
     elseif ( match( b:current_file, '.t$' ) != -1 ) 
