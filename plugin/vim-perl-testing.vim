@@ -25,8 +25,8 @@ function! Find_corresponding_t_file( module )
     let b:testfile = substitute( substitute( a:module, '.\+\/lib\/', '', '' ), '.pm$', '.t', '' )
     let b:basepath = substitute( a:module, '\/lib\/.\+', '', '' )
 
-    if ( match( b:basepath, '/tools' ) != -1 )
-        let b:basepath   = substitute( b:basepath, 'tools', '', '' )
+    if ( match( b:basepath, 'tools' ) != -1 )
+        let b:basepath = substitute( b:basepath, '\/tools', '', '' )
         if ( match( b:testfile, '/' ) == -1 )
             let b:testsubdir = substitute( b:testfile, '.t$', '', '' )
             let b:testfile   = b:testsubdir . '/' . b:testfile
