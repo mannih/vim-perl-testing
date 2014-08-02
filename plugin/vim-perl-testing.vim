@@ -1,3 +1,12 @@
+" vim-perl-testing.vim - Utiltities to help you write and run perl tests
+" Maintainer:   Manni Heumann <manni@github.com>
+" Version:      0.1
+
+if exists('g:loaded_vim_perl_testing') || &cp
+  finish
+endif
+let g:loaded_vim_perl_testing = 1
+
 function! Find_corresponding_t_file( module )
     let b:testfile = substitute( substitute( a:module, '.\+\/lib\/', '', '' ), '.pm$', '.t', '' )
     let b:basepath = substitute( a:module, '\/lib\/.\+', '', '' )
@@ -17,7 +26,6 @@ function! Find_corresponding_t_file( module )
 
     return b:basepath . b:testdir . b:testfile
 endfunction
-
 
 function! Try_lib_or_toolslib( basepath, file )
     let path = a:basepath . '/lib/' . a:file
