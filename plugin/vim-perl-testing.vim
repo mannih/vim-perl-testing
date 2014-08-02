@@ -11,6 +11,10 @@ if !exists('g:vim_perl_testing_use_tmux')
   let g:vim_perl_testing_use_tmux = 0
 endif
 
+if !exists('g:vim_perl_testing_use_taglist')
+  let g:vim_perl_testing_use_taglist = 0
+endif
+
 
 function! Find_corresponding_t_file( module )
     let b:testfile = substitute( substitute( a:module, '.\+\/lib\/', '', '' ), '.pm$', '.t', '' )
@@ -104,7 +108,6 @@ function! RunTestForCurrentSub()
             else
                 let restore_makeprg = 'setlocal makeprg=' . escape( &l:makeprg, ' ' )
                 let b:test_command = 'perl\ ' . b:test_file . '\ test_' . GetCurrentPerlSub()
-                echom 'restore command is ' . restore_makeprg
                 execute "setlocal makeprg=" . b:test_command
                 execute "make"
                 execute restore_makeprg
@@ -116,8 +119,12 @@ function! RunTestForCurrentSub()
 endfunction
 
 function! GetCurrentPerlSub()
-    perl current_sub()
-    return subName
+    if g:vim_perl_testing_use_taglist
+        return Tlist_Get_Tagname_By_Line()
+    else
+        perl current_sub()
+        return subName
+    endif
 endfunction
 
 if has( 'perl' )
