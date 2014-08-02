@@ -16,6 +16,11 @@ if !exists('g:vim_perl_testing_use_taglist')
 endif
 
 
+" Find_corresponding_t_file
+"
+" Find the coresponding test file for a given module file
+" Pass in the full path of the module/.pm file
+
 function! Find_corresponding_t_file( module )
     let b:testfile = substitute( substitute( a:module, '.\+\/lib\/', '', '' ), '.pm$', '.t', '' )
     let b:basepath = substitute( a:module, '\/lib\/.\+', '', '' )
