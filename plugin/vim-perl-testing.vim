@@ -15,6 +15,29 @@ if !exists('g:vim_perl_testing_use_taglist')
   let g:vim_perl_testing_use_taglist = 0
 endif
 
+" Goto_buffer_or_open
+"
+" An wrapper which opens the requested file in a new tab
+" or if it already exists it will switch to the containing buffer.
+"
+" For GUI Vim we can use "tab drop", for terminal based Vim we
+" determine what to do and use sfbuffer or tabnew to emulate the
+" GUI behaviour.
+"
+" Notice: If doesn't work properly try to: set switchbuf=usetab
+" in your vimrc
+
+function! Goto_buffer_or_open( file )
+    if exists( ":tab drop" )
+        exec "tab drop " . a:file
+    else
+        if bufexists( a:file )
+            exec "sbuffer " . a:file
+        else
+            exec "tabnew " . a:file
+        endif
+    endif
+endfunction
 
 " Find_corresponding_t_file
 "
@@ -92,7 +115,7 @@ function! GotoCorresponding()
                 endif
             endif
         endif
-        execute "tab drop " . file
+        execute Goto_buffer_or_open( file )
     else
         echoe "Cannot find corresponding file for: ".module
     endif
