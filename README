@@ -5,7 +5,7 @@ from your favorite editor.
 
 Available commands that you might want to map to handy keystrokes:
 
- GotoCorresponding()
+ :call GotoCorresponding()
 
 If you are currently editing a module, this function will open a new tab
 containing the corresponding .t file. If you are currently editing a test
@@ -16,7 +16,7 @@ See http://blogs.perl.org/users/ovid/2013/03/discoverable-tests-and-creating-tes
 for the details of this and also to learn about the inspiration for this
 plugin.
 
- RunTestForCurrentSub()
+ :call RunTestForCurrentSub()
 
 When working on a subroutine, you may feel like running the corresponding
 test. The function will find your corresponding test file and will try to 
