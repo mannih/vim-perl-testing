@@ -24,7 +24,7 @@ endif
 " determine what to do and use sfbuffer or tabnew to emulate the
 " GUI behaviour.
 "
-" Notice: If doesn't work properly try to: set switchbuf=usetab
+" Notice: If it doesn't work properly try to: set switchbuf=usetab
 " in your vimrc
 
 function! Goto_buffer_or_open( file )
