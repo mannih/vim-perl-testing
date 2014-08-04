@@ -27,15 +27,18 @@ endif
 " Notice: If it doesn't work properly try to: set switchbuf=usetab
 " in your vimrc
 
-function! Goto_buffer_or_open( file )
-    if exists( ":tab drop" )
-        exec "tab drop " . a:file
-    else
-        if bufexists( a:file )
-            exec "sbuffer " . a:file
+function! Goto_buffer_or_open( how, file )
+    if a:how ==# 'tab'
+        exec 'tab drop ' . a:file
+    elseif a:how ==# 'split' 
+        let l:winnr = bufwinnr( a:file )
+        if l:winnr > -1
+            exec l:winnr . ' wincmd w'
         else
-            exec "tabnew " . a:file
+            exec 'new ' . a:file
         endif
+    else
+        exec 'edit ' . a:file
     endif
 endfunction
 
@@ -103,7 +106,11 @@ function! GetCorresponding()
     endif
 endfunction
 
-function! GotoCorresponding()
+function! GotoCorresponding( ... )
+    let l:how = 'edit'
+    if a:0 > 0
+        let l:how = a:1
+    endif
     let file = GetCorresponding()
     let module = expand( '%:p' )
     if !empty( file )
@@ -115,7 +122,7 @@ function! GotoCorresponding()
                 endif
             endif
         endif
-        execute Goto_buffer_or_open( file )
+        execute Goto_buffer_or_open( l:how, file )
     else
         echoe "Cannot find corresponding file for: ".module
     endif
