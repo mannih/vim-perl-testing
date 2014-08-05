@@ -29,7 +29,11 @@ endif
 
 function! Goto_buffer_or_open( how, file )
     if a:how ==# 'tab'
-        exec 'tab drop ' . a:file
+        if has( 'gui' ) 
+            exec 'tab drop ' . a:file
+        else
+            " well. now what?
+        endif
     elseif a:how ==# 'split' 
         let l:winnr = bufwinnr( a:file )
         if l:winnr > -1
