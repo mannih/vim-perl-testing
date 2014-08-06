@@ -21,15 +21,6 @@ endif
 " with given 'how'-parameter.
 
 function! Goto_buffer_or_open( how, file )
-    if matchend( a:how, 'split' ) > -1
-        let l:winnr = bufwinnr( a:file )
-
-        if l:winnr == -1
-           exec a:how . " " . a:file
-           return
-        endif
-    endif
-
     if bufexists( a:file )
         exec "sbuffer " . a:file
     else
