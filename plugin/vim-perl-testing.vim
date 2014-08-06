@@ -17,32 +17,23 @@ endif
 
 " Goto_buffer_or_open
 "
-" An wrapper which opens the requested file in a new tab
-" or if it already exists it will switch to the containing buffer.
-"
-" For GUI Vim we can use "tab drop", for terminal based Vim we
-" determine what to do and use sfbuffer or tabnew to emulate the
-" GUI behaviour.
-"
-" Notice: If it doesn't work properly try to: set switchbuf=usetab
-" in your vimrc
+" Focus buffer or if it doesn't exists open it
+" with given 'how'-parameter.
 
 function! Goto_buffer_or_open( how, file )
-    if a:how ==# 'tab'
-        if has( 'gui' ) 
-            exec 'tab drop ' . a:file
-        else
-            " well. now what?
-        endif
-    elseif a:how ==# 'split' 
+    if matchend( a:how, 'split' ) > -1
         let l:winnr = bufwinnr( a:file )
-        if l:winnr > -1
-            exec l:winnr . ' wincmd w'
-        else
-            exec 'new ' . a:file
+
+        if l:winnr == -1
+           exec a:how . " " . a:file
+           return
         endif
+    endif
+
+    if bufexists( a:file )
+        exec "sbuffer " . a:file
     else
-        exec 'edit ' . a:file
+       exec a:how . " " . a:file
     endif
 endfunction
 
