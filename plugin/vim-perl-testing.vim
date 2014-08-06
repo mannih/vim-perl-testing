@@ -33,7 +33,7 @@ function! Goto_buffer_or_open( how, file )
     if bufexists( a:file )
         exec "sbuffer " . a:file
     else
-       exec a:how . " " . a:file
+        exec a:how . " " . a:file
     endif
 endfunction
 
