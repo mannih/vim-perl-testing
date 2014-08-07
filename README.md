@@ -5,7 +5,7 @@ from your favorite editor.
 
 ## Available commands..
 
-you might want to map to handy keystrokes:
+... you might want to map to handy keystrokes:
 
 ```
 :call GotoCorresponding( <open_with:tabnew|split|..[default=edit]> )

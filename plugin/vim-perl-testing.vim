@@ -17,7 +17,7 @@ endif
 
 " Goto_buffer_or_open
 "
-" Focus buffer or if it doesn't exists open it
+" Focus buffer or - if it doesn't exist - open it
 " with given 'how'-parameter.
 
 function! Goto_buffer_or_open( how, file )
