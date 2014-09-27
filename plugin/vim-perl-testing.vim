@@ -21,9 +21,11 @@ endif
 " with given 'how'-parameter.
 
 function! Goto_buffer_or_open( how, file )
-    if bufexists( a:file )
+    if bufexists( a:file ) && buflisted( a:file ) && bufloaded( a:file )
+        echom "we have a buffer for file " . a:file
         exec "sbuffer " . a:file
     else
+        echom "loading new buffer: '" . a:how . " " . a:file . "'"
         exec a:how . " " . a:file
     endif
 endfunction
