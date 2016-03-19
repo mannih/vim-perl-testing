@@ -2,9 +2,9 @@
 " Maintainer:   Manni Heumann <manni@github.com>
 " Version:      0.1
 
-if exists('g:loaded_vim_perl_testing') || &cp
-  finish
-endif
+" if exists('g:loaded_vim_perl_testing') || &cp
+"   finish
+" endif
 let g:loaded_vim_perl_testing = 1
 
 if !exists('g:vim_perl_testing_use_tmux')
@@ -105,7 +105,7 @@ function! GotoCorresponding( ... )
         if ( match( file, '.t$' ) != -1 )
             if !filereadable( file )
                 let error = system( "make_test_stub " . module . " " . file )
-                if ( v:shell_error ) 
+                if ( v:shell_error )
                     echoe "Could not run make_test_stub: " . error
                 endif
             endif
@@ -125,7 +125,7 @@ function! RunTestForCurrentSub()
                 let b:test_command = "perl Space " . b:test_file . " Space test_" . GetCurrentPerlSub()
                 let b:tmux_command = "tmux send-keys -t :.+ " . b:test_command . " Enter"
                 let error = system( b:tmux_command )
-                if ( v:shell_error ) 
+                if ( v:shell_error )
                     echoe "Could not run " b:test_command . ": " . error
                 endif
             else
@@ -137,7 +137,13 @@ function! RunTestForCurrentSub()
             endif
         endif
     elseif ( match( b:current_file, '.t$' ) != -1 ) 
-        " todo
+        let l:current_test_sub = tagbar#currenttag('%s','')
+        let l:test_command = "perl Space " . b:current_file . "  Space " . l:current_test_sub
+        let l:tmux_command = "tmux send-keys -t :.+ " . l:test_command . ' Enter'
+        let error = system( l:tmux_command )
+        if ( v:shell_error )
+            echoe "Could not run " l:tmux_command . ": " . error
+        endif
     endif
 endfunction
 
