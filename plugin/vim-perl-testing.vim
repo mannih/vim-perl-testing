@@ -2,9 +2,9 @@
 " Maintainer:   Manni Heumann <manni@github.com>
 " Version:      0.1
 
-" if exists('g:loaded_vim_perl_testing') || &cp
-"   finish
-" endif
+if exists('g:loaded_vim_perl_testing') || &cp
+  finish
+endif
 let g:loaded_vim_perl_testing = 1
 
 if !exists('g:vim_perl_testing_use_tmux')
@@ -129,20 +129,28 @@ function! RunTestForCurrentSub()
                     echoe "Could not run " b:test_command . ": " . error
                 endif
             else
-                let restore_makeprg = 'setlocal makeprg=' . escape( &l:makeprg, ' ' )
+                let l:restore_makeprg = 'setlocal makeprg=' . escape( &l:makeprg, ' ' )
                 let b:test_command = 'perl\ ' . b:test_file . '\ test_' . GetCurrentPerlSub()
                 execute "setlocal makeprg=" . b:test_command
                 execute "make"
-                execute restore_makeprg
+                execute l:restore_makeprg
             endif
         endif
     elseif ( match( b:current_file, '.t$' ) != -1 ) 
-        let l:current_test_sub = tagbar#currenttag('%s','')
-        let l:test_command = "perl Space " . b:current_file . "  Space " . l:current_test_sub
-        let l:tmux_command = "tmux send-keys -t :.+ " . l:test_command . ' Enter'
-        let error = system( l:tmux_command )
-        if ( v:shell_error )
-            echoe "Could not run " l:tmux_command . ": " . error
+        if g:vim_perl_testing_use_tmux
+            let l:current_test_sub = GetCurrentPerlSub()
+            let l:test_command     = "perl Space " . b:current_file . "  Space " . l:current_test_sub
+            let l:tmux_command     = "tmux send-keys -t :.+ " . l:test_command . ' Enter'
+            let error = system( l:tmux_command )
+            if ( v:shell_error )
+                echoe "Could not run " l:tmux_command . ": " . error
+            endif
+        else
+            let l:restore_makeprg = 'setlocal makeprg=' . escape( &l:makeprg, ' ' )
+            let b:test_command = 'perl\ ' . b:current_file . '\ ' . GetCurrentPerlSub()
+            execute "setlocal makeprg=" . b:test_command
+            execute "make"
+            execute l:restore_makeprg
         endif
     endif
 endfunction
