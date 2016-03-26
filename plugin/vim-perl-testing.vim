@@ -118,11 +118,12 @@ endfunction
 
 function! RunTestForCurrentSub()
     let b:current_file = expand( '%:p' )
+    let l:current_sub = GetCurrentPerlSub()
     if ( match( b:current_file, '.pm$') != -1 )
         let b:test_file = Find_corresponding_t_file( b:current_file )
         if filereadable( b:test_file )
             if g:vim_perl_testing_use_tmux
-                let b:test_command = "perl Space " . b:test_file . " Space test_" . GetCurrentPerlSub()
+                let b:test_command = "perl Space " . b:test_file . " Space test_" . l:current_sub
                 let b:tmux_command = "tmux send-keys -t :.+ " . b:test_command . " Enter"
                 let error = system( b:tmux_command )
                 if ( v:shell_error )
@@ -130,7 +131,7 @@ function! RunTestForCurrentSub()
                 endif
             else
                 let l:restore_makeprg = 'setlocal makeprg=' . escape( &l:makeprg, ' ' )
-                let b:test_command = 'perl\ ' . b:test_file . '\ test_' . GetCurrentPerlSub()
+                let b:test_command = 'perl\ ' . b:test_file . '\ test_' . l:current_sub
                 execute "setlocal makeprg=" . b:test_command
                 execute "make"
                 execute l:restore_makeprg
@@ -138,8 +139,7 @@ function! RunTestForCurrentSub()
         endif
     elseif ( match( b:current_file, '.t$' ) != -1 ) 
         if g:vim_perl_testing_use_tmux
-            let l:current_test_sub = GetCurrentPerlSub()
-            let l:test_command     = "perl Space " . b:current_file . "  Space " . l:current_test_sub
+            let l:test_command     = "perl Space " . b:current_file . "  Space " . l:current_sub
             let l:tmux_command     = "tmux send-keys -t :.+ " . l:test_command . ' Enter'
             let error = system( l:tmux_command )
             if ( v:shell_error )
@@ -147,7 +147,7 @@ function! RunTestForCurrentSub()
             endif
         else
             let l:restore_makeprg = 'setlocal makeprg=' . escape( &l:makeprg, ' ' )
-            let b:test_command = 'perl\ ' . b:current_file . '\ ' . GetCurrentPerlSub()
+            let b:test_command = 'perl\ ' . b:current_file . '\ ' . l:current_sub
             execute "setlocal makeprg=" . b:test_command
             execute "make"
             execute l:restore_makeprg
