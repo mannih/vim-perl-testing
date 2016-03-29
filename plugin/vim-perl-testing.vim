@@ -48,7 +48,7 @@ function! Find_corresponding_t_file( module )
     endif
 
     let b:testdir = '/t/'
-    if ( ! isdirectory( '.' . b:testdir ) )
+    if ( ! isdirectory( b:basepath . b:testdir ) )
         let b:testdir = '/tests/perl/'
     endif
 
